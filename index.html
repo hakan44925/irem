@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>İrem | KPSS Çağdaş Türk ve Dünya Tarihi</title>
+  <title>İrem | KPSS Çağdaş Türk ve Dünya Tarihi (50 Kilit Bilgi)</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: #151d30;
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --card-inner: #1a243d;
       --accent: #2563eb;
       --accent-hover: #1d4ed8;
-      --success: #059669;
-      --danger: #dc2626;
+      --accent-soft: rgba(37, 99, 235, 0.15);
+      --success: #10b981;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --border: #263352;
-      --tag-bg: rgba(37, 99, 235, 0.16);
-      --tag-text: #60a5fa;
+      --border: #23314e;
+      --tip-bg: rgba(14, 165, 233, 0.1);
+      --tip-border: #38bdf8;
+      --tip-text: #38bdf8;
+      --gold: #f59e0b;
     }
 
     * {
@@ -40,55 +42,102 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px;
+      padding: 12px 10px 24px;
     }
 
     .container {
       width: 100%;
-      max-width: 440px;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin: auto 0;
+      gap: 12px;
     }
 
     header {
       text-align: center;
-      padding: 6px 0;
+      padding: 4px 2px;
     }
 
     .badge {
-      display: inline-block;
-      background: var(--tag-bg);
-      color: var(--tag-text);
-      font-size: 0.72rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-soft);
+      color: #93c5fd;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.05em;
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 999px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-transform: uppercase;
-      border: 1px solid rgba(96, 165, 250, 0.2);
+      border: 1px solid rgba(147, 197, 253, 0.25);
     }
 
     header h1 {
-      font-size: 1.25rem;
+      font-size: 1.22rem;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: -0.01em;
+      line-height: 1.3;
     }
 
     header p {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 3px;
     }
 
+    /* Üst Navigasyon & Arama */
+    .search-box {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 0.84rem;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .search-box:focus {
+      border-color: var(--accent);
+    }
+
+    .unit-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .unit-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      white-space: nowrap;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* Görünüm Sekmeleri */
     .tab-bar {
       display: flex;
       background: var(--card-bg);
-      padding: 4px;
-      border-radius: 12px;
+      padding: 3px;
+      border-radius: 10px;
       border: 1px solid var(--border);
     }
 
@@ -97,10 +146,10 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      padding: 10px;
+      padding: 8px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -110,10 +159,11 @@
       color: #ffffff;
     }
 
+    /* Flashcard (Kart) Modu */
     .flashcard-wrapper {
       perspective: 1000px;
       width: 100%;
-      height: 300px;
+      height: 410px;
       cursor: pointer;
     }
 
@@ -122,9 +172,9 @@
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
-      border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
 
     .flashcard.flipped {
@@ -136,84 +186,113 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 18px;
-      padding: 22px;
+      border-radius: 16px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       border: 1px solid var(--border);
       background: var(--card-bg);
+      overflow-y: auto;
     }
 
     .card-front {
-      background: linear-gradient(180deg, #172138, #0f172a);
+      background: linear-gradient(180deg, #162035, #0d1424);
     }
 
     .card-back {
       transform: rotateY(180deg);
-      background: linear-gradient(180deg, #1b2642, #111a2e);
+      background: linear-gradient(180deg, #18233c, #101728);
       border-color: #3b82f6;
     }
 
     .tag-row {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 0.72rem;
       font-weight: 700;
       color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 6px;
     }
 
-    .card-question {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.45;
-      text-align: center;
+    .category-chip {
+      background: rgba(59, 130, 246, 0.18);
+      color: #93c5fd;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.68rem;
+    }
+
+    .card-title-front {
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.4;
+      text-align: left;
       margin: auto 0;
     }
 
-    .card-answer {
+    .card-answer-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 8px 0;
+      text-align: left;
+    }
+
+    .answer-title {
       font-size: 0.94rem;
-      line-height: 1.45;
-      text-align: center;
-      color: #e2e8f0;
-      margin: auto 0;
+      font-weight: 800;
+      color: #38bdf8;
+      line-height: 1.35;
+    }
+
+    .answer-desc {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: #cbd5e1;
     }
 
     .tip-box {
       font-size: 0.78rem;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px dashed rgba(56, 189, 248, 0.3);
+      color: var(--tip-text);
+      background: var(--tip-bg);
+      border-left: 3px solid var(--tip-border);
       padding: 8px 10px;
-      border-radius: 8px;
-      text-align: left;
-      line-height: 1.35;
+      border-radius: 6px;
+      line-height: 1.45;
+    }
+    .tip-box strong {
+      color: #ffffff;
     }
 
     .hint {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 6px;
     }
 
     .nav-controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .btn {
       flex: 1;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 11px;
+      border-radius: 10px;
       border: none;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       transition: opacity 0.2s;
     }
 
@@ -228,51 +307,60 @@
       color: #fff;
     }
 
-    .quiz-card {
-      background: var(--card-bg);
-      border-radius: 18px;
-      padding: 20px;
-      border: 1px solid var(--border);
+    /* Liste Modu */
+    .list-wrapper {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
-    .quiz-question {
-      font-size: 0.96rem;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
-    .quiz-options {
+    .list-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-    }
-
-    .opt-btn {
-      background: #0f172a;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 12px 14px;
-      border-radius: 10px;
       text-align: left;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .opt-btn.correct {
-      background: rgba(16, 185, 129, 0.2);
-      border-color: var(--success);
-      color: #34d399;
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .opt-btn.wrong {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: var(--danger);
-      color: #f87171;
+    .list-num {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #60a5fa;
+      background: rgba(96, 165, 250, 0.12);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .list-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+    }
+
+    .list-desc {
+      font-size: 0.82rem;
+      line-height: 1.48;
+      color: #cbd5e1;
+    }
+
+    .list-tip {
+      font-size: 0.76rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 2px solid #38bdf8;
+      padding: 6px 8px;
+      border-radius: 4px;
+      line-height: 1.4;
     }
 
     .hidden {
@@ -284,223 +372,554 @@
 
   <div class="container">
     <header>
-      <div class="badge">KPSS HAZIRLIK MODÜLÜ</div>
-      <h1>İrem'in Çağdaş Tarih Not Defteri</h1>
-      <p>Çağdaş Türk ve Dünya Tarihi Nokta Atışı Bilgiler</p>
+      <div class="badge">📘 KPSS ÇAĞDAŞ TARİH AKADEMİSİ</div>
+      <h1>İrem'in Çağdaş Tarih Notları</h1>
+      <p>Müfredattaki 5 Ünite • 50 Kilit Nokta Atışı Bilgi</p>
     </header>
 
-    <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('cards')">🃏 Bilgi Kartları</button>
-      <button class="tab-btn" onclick="switchTab('quiz')">🎯 Soru Çözümü</button>
+    <!-- Arama Kutusu -->
+    <input type="text" id="searchInput" class="search-box" placeholder="🔍 Konu veya kavram ara (Örn: Basmacı, Truman, NEP)..." oninput="handleSearch()">
+
+    <!-- Ünite Filtre Butonları -->
+    <div class="unit-scroll">
+      <button class="filter-chip active" onclick="filterUnit('all', this)">Tümü (50)</button>
+      <button class="filter-chip" onclick="filterUnit(1, this)">1. Ünite (20. Yy Başı)</button>
+      <button class="filter-chip" onclick="filterUnit(2, this)">2. Ünite (II. Dünya Savaşı)</button>
+      <button class="filter-chip" onclick="filterUnit(3, this)">3. Ünite (Soğuk Savaş)</button>
+      <button class="filter-chip" onclick="filterUnit(4, this)">4. Ünite (Yumuşama)</button>
+      <button class="filter-chip" onclick="filterUnit(5, this)">5. Ünite (Küreselleşen)</button>
     </div>
 
-    <div id="cardsSection" style="display: flex; flex-direction: column; gap: 12px;">
+    <!-- Sekmeler (Kart Modu vs Liste Modu) -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchView('deck')">🃏 Kart Çalışma Modu</button>
+      <button class="tab-btn" onclick="switchView('list')">📋 50 Madde Tümü (Liste)</button>
+    </div>
+
+    <!-- 1. KART ÇALIŞMA MODU -->
+    <div id="deckSection">
       <div class="flashcard-wrapper" onclick="flipCard()">
         <div class="flashcard" id="mainCard">
+          <!-- Ön Yüz -->
           <div class="card-face card-front">
             <div class="tag-row">
-              <span id="cardCategory">KATEGORİ</span>
-              <span id="cardIndex">1 / 6</span>
+              <span class="category-chip" id="cardCategory">1. ÜNİTE</span>
+              <span id="cardIndex" style="font-weight: 700; color: #60a5fa;">1 / 50</span>
             </div>
-            <div class="card-question" id="cardQuestion">Yükleniyor...</div>
-            <div class="hint">Cevabı ve ÖSYM notunu görmek için dokun 👆</div>
+            <div class="card-title-front" id="cardTitleFront">Yükleniyor...</div>
+            <div class="hint">Ayrıntılı sınav açıklamasını görmek için dokun 👆</div>
           </div>
+          <!-- Arka Yüz -->
           <div class="card-face card-back">
             <div class="tag-row">
-              <span>HAP BİLGİ</span>
-              <span style="color: #60a5fa;">ÖSYM İPUCU 📌</span>
+              <span class="category-chip" id="cardCategoryBack">DETAYLI ANALİZ</span>
+              <span style="color: #f59e0b; font-weight: 700;">KPSS NOTU 📌</span>
             </div>
-            <div class="card-answer" id="cardAnswer">Cevap yükleniyor...</div>
-            <div class="tip-box" id="cardNote">İpucu...</div>
-            <div class="hint">Sonraki karta geçmek için alttan ilerle 👉</div>
+            <div class="card-answer-body">
+              <div class="answer-title" id="cardAnswerTitle">Başlık</div>
+              <div class="answer-desc" id="cardAnswer">Açıklama yükleniyor...</div>
+              <div class="tip-box" id="cardNote">İpucu...</div>
+            </div>
+            <div class="hint">Kartı çevirmek için tekrar dokun 👆</div>
           </div>
         </div>
       </div>
 
-      <div class="nav-controls">
+      <div class="nav-controls" style="margin-top: 10px;">
         <button class="btn btn-secondary" onclick="prevCard()">◀ Önceki</button>
         <button class="btn btn-primary" onclick="nextCard()">Sonraki ▶</button>
       </div>
     </div>
 
-    <div id="quizSection" class="hidden">
-      <div class="quiz-card">
-        <div class="tag-row">
-          <span>SORU MODÜLÜ</span>
-          <span id="quizIndex">1 / 4</span>
-        </div>
-        <div class="quiz-question" id="quizQuestion">Soru metni...</div>
-        <div class="quiz-options" id="quizOptions"></div>
-        <div id="quizFeedback" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; min-height: 24px;"></div>
-      </div>
+    <!-- 2. LİSTE MODU -->
+    <div id="listSection" class="hidden">
+      <div class="list-wrapper" id="listContainer"></div>
     </div>
   </div>
 
   <script>
-    const cards = [
+    const items = [
+      // 1. ÜNİTE
       {
-        category: "SOĞUK SAVAŞ / BLOKLAR",
-        question: "1955 Bandung Konferansı ile temelleri atılan ve 'Doğu ile Batı blokları dışında kalmayı' amaçlayan hareket hangisidir?",
-        answer: "Bağlantısızlar Hareketi (Üçüncü Dünya Ülkeleri). Öncüleri: Tito (Yugoslavya), Cemal Abdülnasır (Mısır), Nehru (Hindistan).",
-        note: "ÖSYM Soru Tipi: Öncü ülkeleri ve liderleri sıklıkla seçeneklerde çeldirici olarak sorar."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "Rus-Japon Savaşı ve Mukden Meydan Muharebesi (1904-1905)",
+        desc: "Asya kökenli bir devletin (Japonya) tarihte ilk kez büyük bir Avrupalı gücü (Çarlık Rusyası) mağlup etmesidir. Mustafa Kemal Sakarya Meydan Muharebesi'nin şiddetini ve büyüklüğünü tarif ederken onu tarihteki en kanlı muharebelerden olan Mukden Muharebesi ile kıyaslamıştır.",
+        tip: "ÖSYM Sakarya kıyaslamasını sormayı sever; I. Dünya Savaşı muharebeleriyle karıştırma."
       },
       {
-        category: "DOKTRİNLER & YARDIMLAR",
-        question: "ABD'nin Sovyet yayılmacılığına karşı Türkiye ve Yunanistan'a doğrudan askeri yardım sağladığı belge hangisidir?",
-        answer: "Truman Doktrini (1947).",
-        note: "Karıştırma: Truman Doktrini askeri yardım içeriklidir; Marshall Planı ise ekonomik kalkınma yardımıdır."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "1905 Rus İhtilali ve Duma Meclisi",
+        desc: "Çar II. Nikola halk ayaklanmalarını yatıştırmak amacıyla parlamento niteliğindeki 'Duma'yı açmıştır. Büyük Türk tarihçi Zeki Velidi Togan, Ufa Müslümanlarının temsilcisi olarak bu meclise girip Rusya Müslümanlarının haklarını savunmuştur.",
+        tip: "Duma Rus Meclisi'dir; Zeki Velidi Togan ise Türkistan bağımsızlık mücadelesinde kilit isimdir."
       },
       {
-        category: "NÜKLEER KRİZLER",
-        question: "1962 yılında ABD ve SSCB'yi nükleer savaş eşiğine getiren, Türkiye'deki Jüpiter füzelerinin de pazarlık konusu olduğu gelişme nedir?",
-        answer: "Küba Füze Krizi (Ekim Füzeleri Bunalımı).",
-        note: "Sonuç: Bu krizin ardından Washington ile Moskova arasına 'Kırmızı Telefon' doğrudan iletişim hattı çekilmiştir."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "İsmail Gaspıralı ve Usul-i Cedid Hareketi",
+        desc: "'Dilde, fikirde, işte birlik' şiarıyla Tercüman gazetesini çıkaran Kırımlı aydındır. Geleneksel medrese yerine modern eğitim veren Usul-i Cedid (Yeni Yöntem) mekteplerini açmış, Rusya Müslümanları Kongresi'ni toplamıştır.",
+        tip: "'Dilde işte fikirde birlik' sözü ve 'Usul-i Cedid' doğrudan İsmail Gaspıralı ile eşleşir."
       },
       {
-        category: "DİPLOMASİ TARİHİ",
-        question: "1973 Yom Kippur (Arap-İsrail) Savaşı sonrası Henry Kissinger'ın yürüttüğü barış diplomasisine ne ad verilir?",
-        answer: "Mekik Diplomasisi.",
-        note: "Sonuç: Bu diplomatik süreç 1978 Camp David Antlaşması'nın imzalanmasına zemin hazırlamıştır."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "Basmacı Hareketi ve Korbaşılar",
+        desc: "Rusların Özbekistan'daki Milli Hokand Hükümeti'ni dağıtması üzerine Türkistan genelinde başlayan silahlı direniştir. Yerel liderlere 'Korbaşı' unvanı verilmiştir. Enver Paşa 1921'de katılmış, 1922'de Belcuvan'da şehit düşmüştür.",
+        tip: "Korbaşı unvanı Basmacı liderleridir. Enver Paşa'nın şehadeti Basmacı direnişindedir."
       },
       {
-        category: "KODLAMA (HAP BİLGİ)",
-        question: "Balkan Antantı'na katılan kurucu devletlerin kodlaması ve üyeleri kimlerdir?",
-        answer: "Kodlama: TAYYAR ➡️ Türkiye, (A)tina/Yunanistan, Yugoslavya, Romanya.",
-        note: "Önemli: Bulgaristan (revizyonist olduğu için) ve Arnavutluk (İtalya baskısı nedeniyle) katılmamıştır."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "1917 Bolşevik İhtilali ve Vladimir Lenin",
+        desc: "Çar II. Nikola tahttan indirilmiş; Vladimir Lenin 'Barış, Ekmek ve Toprak' sloganıyla iktidarı almış ve Brest-Litowsk Antlaşması ile I. Dünya Savaşı'ndan çekilmiştir.",
+        tip: "Slogan: Barış (savaştan çekilme), Ekmek (işçiye aş), Toprak (köylüye arazi) üçlemesidir."
       },
       {
-        category: "SSCB'NİN DAĞILMASI",
-        question: "Mihail Gorbaçov'un SSCB'yi kurtarmak için uyguladığı 'Açıklık/Şeffaflık' ve 'Yeniden Yapılanma' politikaları nelerdir?",
-        answer: "Glasnost (Şeffaflık/Açıklık) ve Perestroyka (Ekonomik ve Siyasi Yeniden Yapılanma).",
-        note: "Sınav Çeldiricisi: Bu iki kavramı birbirinin tanımıyla eşleştirerek ters sormayı severler."
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "NEP Politikası ve Nepmen Sınıfı",
+        desc: "İç savaş sonrası çöken ekonomiyi canlandırmak için Lenin tarafından uygulanan Yeni Ekonomi Politikası'dır. Küçük esnafa serbest ticaret hakkı tanınmış, bu tüccarlara 'Nepmen' adı verilmiştir.",
+        tip: "NEP = Serbest piyasaya kısmi taviz; Nepmen = Bu dönemde oluşan serbest tüccar kesimidir."
+      },
+      {
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "Stalin Dönemi ve Kolhozlar (Kolektifleştirme)",
+        desc: "Lenin'in ölümünden sonra gelen Stalin NEP politikasını kaldırmış, tarım arazilerini 'Kolhoz' adı verilen devlet çiftliklerinde birleştirmiş ve 5 Yıllık Sanayi Planları ile ağır sanayiyi zorunlu kılmıştır.",
+        tip: "Kolhoz = Devletleştirilmiş kolektif tarım çiftliğidir; Stalin dönemiyle özdeşleşir."
+      },
+      {
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "Meiji Restorasyonu ve İmparator Mutsuhito (1868)",
+        desc: "Japonya'da samuraylığı yıkarak Batı tarzı modernleşmeyi başlatan dönemdir. Temel ilkesi 'Güçlü ordusu olan zengin bir ülke yaratmak'tır. Batı bilimi ve tekniği alınmış fakat harf inkılabı yapılmamıştır.",
+        tip: "Tuzak: Japon Meiji Restorasyonu'nda alfabe değiştirilmemiştir (harf inkılabı yoktur)."
+      },
+      {
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "1929 Kara Perşembe ve Kükreyen Yirmiler",
+        desc: "ABD'de I. Dünya Savaşı sonrası yaşanan aşırı tüketim dönemine 'Kükreyen 20'ler' denir. 24 Ekim 1929'da New York borsasının çöküşüyle tarihin en büyük küresel ekonomik buhranı patlak vermiştir.",
+        tip: "Kara Perşembe New York Wall Street borsasının çöküşüdür."
+      },
+      {
+        unit: 1,
+        unitName: "1. ÜNİTE: 20. YY BAŞLARI",
+        title: "Türkiye'nin 1929 Buhranı'na Karşı Önlemleri",
+        desc: "Türkiye ekonomide zorunlu Devletçilik ilkesine geçmiş; ithalata kota koymuş, takasa dayalı 'Kliring' sistemine geçmiş, Merkez Bankası'nı kurmuş (1930) ve Milli İktisat ve Tasarruf Cemiyeti ile Yerli Malı Haftası'nı başlatmıştır.",
+        tip: "Kliring Sistemi (malımı alanın malını alırım takası) doğrudan bu krizin önlemidir."
+      },
+
+      // 2. ÜNİTE
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Revizyonist ve Antirevizyonist Bloklar",
+        desc: "I. Dünya Savaşı antlaşmalarından hoşnut olmayıp sınırları değiştirmek isteyen Almanya, İtalya ve Japonya 'Revizyonist'; mevcut statükoyu korumak isteyen İngiltere ve Fransa ise 'Antirevizyonist' devletlerdir.",
+        tip: "Revizyonist = Değişim/yayılma yanlısı; Antirevizyonist = Statükocu/korumacı."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Yatıştırma Politikası (Appeasement) ve Neville Chamberlain",
+        desc: "İngiltere Başbakanı Chamberlain'in Hitler'i savaştan vazgeçirmek için uyguladığı taviz politikasıdır. 1938 Münih Konferansı ile Çekoslovakya'nın Südet bölgesi Almanya'ya bırakılmış ancak Hitler durdurulamamıştır.",
+        tip: "Münih Konferansı ve Südetler meselesi Yatıştırma Politikasının en somut örneğidir."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Hayat Sahası (Lebensraum)",
+        desc: "Adolf Hitler'in Alman ırkının refah ve beslenmesi amacıyla Doğu Avrupa ve Sovyet Rusya topraklarının ele geçirilmesini savunan saldırgan jeopolitik doktrinidir.",
+        tip: "Hitler'in Doğuya yayılma gerekçesi 'Hayat Sahası' kavramıdır."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Bizim Deniz (Mare Nostrum)",
+        desc: "İtalya faşist diktatörü Benito Mussolini'nin eski Roma İmparatorluğu'nu yeniden kurma iddiasıyla Akdeniz havzasını egemenlik altına alma politikasıdır.",
+        tip: "Mare Nostrum İtalya'nın Akdeniz politikasıdır."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Barbarossa Harekâtı ve Stalingrad Kuşatması (1941)",
+        desc: "Nazi Almanyası'nın SSCB'yi istila etmek amacıyla başlattığı tarihin en büyük kara harekâtıdır. Alman ordularının Stalingrad'da Sovyetlere yenilmesi II. Dünya Savaşı'nın en büyük dönüm noktası olmuştur.",
+        tip: "Almanya'nın Doğu cephesindeki çöküşü Stalingrad yenilgisi ile başlamıştır."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Pearl Harbor Baskını (1941)",
+        desc: "Japonya'nın ABD'nin Hawaii'deki deniz üssüne düzenlediği baskındır. Bu saldırı üzerine ABD resmen II. Dünya Savaşı'na Müttefikler safında girmiştir.",
+        tip: "ABD'nin savaşa resmen dahil olmasına yol açan olaydır."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Atlantik Bildirisi (1941)",
+        desc: "ABD Başkanı Roosevelt ile İngiltere Başbakanı Churchill'in bir savaş gemisinde imzaladığı; Wilson İlkeleri'ne benzeyen ve Birleşmiş Milletler'in (BM) fikri temelini oluşturan belgedir.",
+        tip: "Birleşmiş Milletler Cemiyeti'nin ilk fikri adımı Atlantik Bildirisi'dir."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Yalta Konferansı (1945)",
+        desc: "Roosevelt, Churchill ve Stalin'in katıldığı zirvedir. Almanya'nın dört işgal bölgesine ayrılmasına ve BM Güvenlik Konseyi daimi üyelerine veto hakkı verilmesine karar verilmiştir.",
+        tip: "BM Güvenlik Konseyi'ndeki 'veto hakkı' kararı Yalta Konferansı'nda netleşmiştir."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Potsdam Konferansı (1945)",
+        desc: "Avrupa'da savaş bittikten sonra barış şartlarını görüşmek için toplanan son liderler zirvesidir. Japonya'ya teslim ültimatomu verilmiş, ardından Hiroşima ve Nagazaki'ye atom bombaları atılmıştır.",
+        tip: "Savaşın son büyük zirvesidir; hemen akabinde atom bombası kullanılmıştır."
+      },
+      {
+        unit: 2,
+        unitName: "2. ÜNİTE: II. DÜNYA SAVAŞI",
+        title: "Türkiye'nin II. Dünya Savaşı Tutumu",
+        desc: "Türkiye aktif tarafsızlık politikası izlemiş; Adana ve Kahire görüşmelerinde savaşa girmeyi ertelemiştir. BM kurucu üyesi olabilmek için Şubat 1945'te Almanya ve Japonya'ya sembolik savaş ilan etmiştir.",
+        tip: "Türkiye savaşa fiilen girmemiş, San Francisco Konferansı şartı gereği kağıt üstünde savaş ilan etmiştir."
+      },
+
+      // 3. ÜNİTE
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Demir Perde (Iron Curtain) Kavramı",
+        desc: "Winston Churchill'in 1946 Fulton Konuşması'nda kullandığı, Sovyet kontrolündeki komünist Doğu Bloku ile Batı demokrasileri arasındaki derin kutuplaşmayı simgeleyen kavramdır.",
+        tip: "Demir Perde terimini meşhur eden lider Winston Churchill'dir."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Truman Doktrini (1947)",
+        desc: "ABD Başkanı Harry Truman'ın Sovyet yayılmacılığına karşı Türkiye ve Yunanistan'a doğrudan askeri teçhizat ve savunma yardımı sağladığı doktrindir.",
+        tip: "Truman askeri yardımdır; Marshall ise ekonomik kalkınma hibesidir."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Marshall Planı (1947)",
+        desc: "Savaşta yıkılan Avrupa ekonomilerini komünizme karşı güçlendirmek için ABD Dışişleri Bakanı George Marshall tarafından başlatılan büyük ekonomik sermaye yardım paketidir.",
+        tip: "Türkiye Marshall Planı'ndan traktör ve tarımsal makineleşme desteği almıştır."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Kominform ve Comecon",
+        desc: "SSCB'nin komünist partileri ideolojik olarak koordine etmek için kurduğu teşkilat Kominform; Doğu Bloku ülkeleri arasında ortak iktisadi pazar kurmak için kurduğu örgüt ise Comecon'dur.",
+        tip: "Kominform = İdeolojik birlik; Comecon = Ekonomik dayanışma."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Varşova Paktı (1955)",
+        desc: "Batı Bloku'nun askeri ittifakı NATO'ya (1949) karşılık, Batı Almanya'nın NATO'ya girmesi üzerine SSCB öncülüğünde 8 komünist ülkenin imzaladığı askeri savunma paktıdır.",
+        tip: "NATO'nun Doğu Bloku'ndaki askeri karşılığı Varşova Paktı'dır."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Kore Savaşı ve Türkiye'nin NATO'ya Girişi (1950-1952)",
+        desc: "Türkiye Kore'ye Tuğgeneral Tahsin Yazıcı komutasında bir tugay göndermiştir. Kunuri Muharebeleri'ndeki kahramanlık Türkiye'nin 1952'de NATO'ya kabul edilmesinde belirleyici olmuştur.",
+        tip: "Türkiye'nin Kore Tugay Komutanı Tahsin Yazıcı'dır; bu hamle NATO kapısını açmıştır."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Bağlantısızlar Hareketi ve 1955 Bandung Konferansı",
+        desc: "İki bloğa da dahil olmayan Asya ve Afrika ülkelerince kurulmuştur. Öncü üçlüsü: Mareşal Tito (Yugoslavya), Cemal Abdülnasır (Mısır) ve Cevahirlal Nehru (Hindistan)'dur.",
+        tip: "ÖSYM öncülere Tito, Nasır ve Nehru dışındaki liderleri koyarak çeldirici üretir."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "İsrail Devleti'nin Kuruluşu (1948)",
+        desc: "1917 Balfour Deklarasyonu sürecinin devamında BM taksim planıyla David Ben-Gurion tarafından ilan edilmiş; hemen akabinde I. Arap-İsrail Savaşı patlak vermiştir.",
+        tip: "İsrail'in ilk Başbakanı David Ben-Gurion'dur."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Eisenhower Doktrini (1957)",
+        desc: "1956 Süveyş Krizi sonrası Orta Doğu'daki boşluğu Sovyetlerin doldurmasını önlemek için ABD'nin bölge ülkelerine askeri ve mali yardım taahhüt ettiği doktrindir.",
+        tip: "Orta Doğu'ya özel Amerikan doktrini Eisenhower Doktrini'dir."
+      },
+      {
+        unit: 3,
+        unitName: "3. ÜNİTE: SOĞUK SAVAŞ DÖNEMİ",
+        title: "Berlin Duvarı (Utanç Duvarı - 1961)",
+        desc: "Doğu Almanya'dan Batı Berlin'e kitlesel kaçışları engellemek amacıyla Doğu Alman yönetimi tarafından örülen ve Soğuk Savaş'ın fiziksel simgesi haline gelen duvardır.",
+        tip: "1989 yılında yıkılması Soğuk Savaş'ın bitişinin en somut müjdecisi olmuştur."
+      },
+
+      // 4. ÜNİTE
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Yumuşama (Detant) Süreci",
+        desc: "Nükleer dehşet dengesi nedeniyle ABD (Kennedy) ve SSCB (Kruşçev) liderliğinde bloklar arasındaki gerilimin diplomatik müzakerelerle düşürülmesi dönemidir.",
+        tip: "Detant nükleer savaş korkusunun getirdiği zorunlu diyalog dönemidir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Küba Füze Krizi ve Jüpiter Füzeleri (1962)",
+        desc: "SSCB'nin Küba'ya nükleer füze yerleştirmesiyle çıkan bunalımdır. ABD'nin Türkiye'deki Jüpiter füzelerini sökmesi taahhüdüyle kriz çözülmüş ve liderler arasına 'Kırmızı Telefon' hattı kurulmuştur.",
+        tip: "Türkiye'deki füzelerin adı Jüpiter'dir; kriz sonrası Kırmızı Telefon hattı çekilmiştir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "SALT-1 ve SALT-2 Anlaşmaları",
+        desc: "Stratejik Silahları Sınırlandırma Görüşmeleridir. SALT-1 (1972) yürürlüğe girmiş; SALT-2 (1979) ise SSCB'nin Afganistan'ı işgal etmesi nedeniyle ABD Senatosu'nca onaylanmamıştır.",
+        tip: "SALT-2'nin rafa kalkma nedeni SSCB'nin Afganistan işgalidir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Helsinki Nihai Senedi (1975)",
+        desc: "Avrupa Güvenlik ve İşbirliği Konferansı (AGİK) kapsamında 35 ülkenin imzaladığı, sınırların dokunulmazlığını ve temel insan haklarını güvence altına alan Yumuşama Dönemi'nin zirve belgesidir.",
+        tip: "Helsinki Belgesi insan hakları ve sınırların değişmezliği garantisidir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Mekik Diplomasisi ve Henry Kissinger (1973-1974)",
+        desc: "1973 Yom Kippur (Arap-İsrail) Savaşı sonrası ABD Dışişleri Bakanı Henry Kissinger'ın Orta Doğu başkentleri arasında barış sağlamak için yürüttüğü yoğun arabuluculuk trafiğidir.",
+        tip: "Kissinger ve Mekik Diplomasisi Yom Kippur sonrası barış için yürütülmüştür."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Camp David Antlaşmaları (1978)",
+        desc: "Mekik diplomasisi neticesinde ABD arabuluculuğunda Mısır (Enver Sedat) ile İsrail (Menahem Begin) arasında imzalanmıştır. Mısır, İsrail'i tanıyan ilk Arap devleti olmuştur.",
+        tip: "İsrail'i tanıyan İLK Arap devleti Mısır'dır (Camp David ile)."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "İran İslam Devrimi (1979)",
+        desc: "Batı yanlısı Şah Rıza Pehlevi iktidarının devrilmesiyle Ayetullah Humeyni önderliğinde teokratik İran İslam Cumhuriyeti'nin kurulmasıdır.",
+        tip: "Devrimin dini ve siyasi lideri Ayetullah Humeyni'dir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "İran-Irak Savaşı ve İrangate Skandalı (1980-1988)",
+        desc: "Şattülarap su yolu hâkimiyeti yüzünden çıkan 8 yıllık savaştır. ABD'nin gizlice İran'a silah satıp gelirini Nikaragua'daki Kontralara aktardığının ortaya çıkması İrangate skandalı olarak tarihe geçmiştir.",
+        tip: "İrangate skandalı İran-Irak Savaşı esnasında ortaya çıkan gizli silah ticaretidir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "Kıbrıs Barış Harekâtı (1974)",
+        desc: "EOKA'nın Enosis darbesi üzerine Başbakan Bülent Ecevit ve Başbakan Yardımcısı Necmettin Erbakan hükümetince 'Ayşe Tatile Çıksın' parolasıyla gerçekleştirilen garantörlük harekâtıdır.",
+        tip: "Parola: 'Ayşe Tatile Çıksın'. Dönemin Başbakanı Bülent Ecevit'tir."
+      },
+      {
+        unit: 4,
+        unitName: "4. ÜNİTE: YUMUŞAMA DÖNEMİ",
+        title: "ASALA Terör Örgütü",
+        desc: "1970'li ve 1980'li yıllarda Türk büyükelçilerini, diplomatlarını ve konsolosluk görevlilerini şehit eden Ermeni terör örgütüdür.",
+        tip: "Yurt dışındaki diplomatlarımıza suikast düzenleyen örgüt ASALA'dır."
+      },
+
+      // 5. ÜNİTE
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Glasnost ve Perestroyka",
+        desc: "Mihail Gorbaçov'un SSCB'yi kurtarmak için başlattığı reformlardır. Glasnost devlette şeffaflık/açıklık; Perestroyka ise hantal ekonomiyi yeniden yapılandırma ve özel teşebbüse kısmen izin verme hamlesidir.",
+        tip: "Glasnost = Siyasi şeffaflık; Perestroyka = Ekonomik yeniden yapılanma."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "SSCB'nin Dağılması ve BDT (1991)",
+        desc: "Alma-Ata Protokolü ve Bağımsız Devletler Topluluğu'nun (BDT) ilanıyla 25 Aralık 1991'de Gorbaçov istifa etmiş, SSCB resmen parçalanarak Soğuk Savaş sona ermiştir.",
+        tip: "Alma-Ata Zirvesi ve BDT kuruluşu Sovyetler'in resmen tarihe karıştığı andır."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Bağımsızlığını Kazanan Türk Cumhuriyetleri",
+        desc: "Azerbaycan, Kazakistan, Özbekistan, Türkmenistan ve Kırgızistan bağımsız olmuş; bu cumhuriyetlerin bağımsızlığını dünyada İLK tanıyan devlet Türkiye Cumhuriyeti olmuştur.",
+        tip: "Türk cumhuriyetlerini tanıyan ilk devlet Türkiye'dir."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "TİKA ve TÜRKSOY'un Kuruluşu",
+        desc: "Türkiye, Türk cumhuriyetleriyle teknik ve iktisadi yardımlaşma için 1992'de TİKA'yı; Türk dili ve kültürünü yaşatmak için 1993'te TÜRKSOY'u kurmuştur.",
+        tip: "TİKA = İktisadi/teknik kalkınma; TÜRKSOY = Kültür ve sanat ortaklığı."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Şanghay İşbirliği Örgütü (1996 / 2001)",
+        desc: "1996'da sınır güvenliği için Rusya, Çin, Kazakistan, Kırgızistan ve Tacikistan (Şanghay Beşlisi) tarafından kurulmuş; 2001'de Özbekistan'ın katılımıyla örgüt adını almıştır.",
+        tip: "Örgüte 2001'de dahil olan ve 'Beşli'yi örgüte dönüştüren ülke Özbekistan'dır."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "I. Körfez Savaşı (1990-1991)",
+        desc: "Saddam Hüseyin liderliğindeki Irak'ın Kuveyt'i işgaliyle çıkmıştır. BM öncülüğünde Çöl Fırtınası Harekâtı yapılmış; Türkiye Kerkük-Yumurtalık petrol boru hattını kapatmıştır.",
+        tip: "Harekâtın adı 'Çöl Fırtınası'; Türkiye Kerkük-Yumurtalık hattını kapatmıştır."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Bosna Savaşı ve Dayton Antlaşması (1995)",
+        desc: "Sırpların Boşnaklara yönelik soykırımı (Srebrenitsa) sonrası 'Bilge Kral' Aliya İzzetbegoviç önderliğinde verilen mücadele 1995 Dayton Barış Antlaşması ile tescillenmiştir.",
+        tip: "Aliya İzzetbegoviç 'Bilge Kral'dır; Bosna bağımsızlığı Dayton ile tescillenmiştir."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Karabağ Meselesi ve Hocalı Katliamı (1992)",
+        desc: "Ermenistan'ın Azerbaycan toprağı olan Dağlık Karabağ'ı işgali ve Hocalı'da gerçekleştirdiği sivil katliamdır. AGİT bünyesindeki Minsk Grubu sorunu uzun yıllar çözümsüz bırakmıştır.",
+        tip: "Sorunu çözmekle görevlendirilen fakat çözmeyen grup AGİT Minsk Grubu'dur."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Maastricht Antlaşması (1992)",
+        desc: "Avrupa Topluluğu'nu resmen 'Avrupa Birliği'ne (AB) dönüştüren, Euro ortak para birimini ve ekonomik parasal birlik kriterlerini belirleyen kurucu antlaşmadır.",
+        tip: "Avrupa Topluluğu'nu Avrupa Birliği yapan antlaşma Maastricht'tir."
+      },
+      {
+        unit: 5,
+        unitName: "5. ÜNİTE: KÜRESELLEŞEN DÜNYA",
+        title: "Kopenhag Kriterleri (1993)",
+        desc: "Bir aday ülkenin Avrupa Birliği'ne tam üye olabilmesi için karşılaması gereken demokrasi, hukukun üstünlüğü, insan hakları ve piyasa ekonomisi standartlarıdır.",
+        tip: "AB'ye üyelik için gereken siyasi ve hukuki standartlar bütünüdür."
       }
     ];
 
-    const quizQuestions = [
-      {
-        question: "Aşağıdaki devletlerden hangisi 1955 Bandung Konferansı ile şekillenen Bağlantısızlar Hareketi'nin öncü liderlerinden biri DEĞİLDİR?",
-        options: ["Yugoslavya (Tito)", "Mısır (Cemal Abdülnasır)", "İngiltere (Winston Churchill)", "Hindistan (Nehru)"],
-        answer: 2,
-        explanation: "Bağlantısızlar Hareketi Tito, Nasır ve Nehru öncülüğünde kurulmuştur; Churchill Batı Bloku lideridir."
-      },
-      {
-        question: "1974 Kıbrıs Barış Harekâtı sırasında görev yapan Türkiye Cumhuriyeti Başbakanı kimdir?",
-        options: ["Süleyman Demirel", "Bülent Ecevit", "Adnan Menderes", "Nihat Erim"],
-        answer: 1,
-        explanation: "Harekât, CHP-MSP koalisyonunda Başbakan Bülent Ecevit ve Başbakan Yardımcısı Necmettin Erbakan döneminde yapılmıştır."
-      },
-      {
-        question: "Mihail Gorbaçov döneminde Sovyetler Birliği'nde devlet yönetiminde şeffaflığı sağlamak amacıyla yürürlüğe konan politikanın adı nedir?",
-        options: ["Perestroyka", "Glasnost", "Kominform", "Comecon"],
-        answer: 1,
-        explanation: "Glasnost 'açıklık ve şeffaflık', Perestroyka ise 'yeniden yapılanma ve reform' anlamına gelir."
-      },
-      {
-        question: "ABD'nin Orta Doğu ülkelerini Sovyet yayılmacılığına karşı korumayı ve askeri yardım yapmayı taahhüt ettiği doktrin hangisidir?",
-        options: ["Eisenhower Doktrini", "Monroe Doktrini", "Truman Doktrini", "Breznev Doktrini"],
-        answer: 0,
-        explanation: "Orta Doğu'ya yönelik askeri-ekonomik taahhüt Eisenhower Doktrini'dir. Monroe ise ABD'nin yalnızlık politikasıdır."
-      }
-    ];
-
-    let currentCard = 0;
-    let currentQuiz = 0;
+    let currentFiltered = [...items];
+    let currentIndex = 0;
+    let selectedUnit = 'all';
 
     function flipCard() {
       document.getElementById('mainCard').classList.toggle('flipped');
     }
 
-    function updateCard() {
-      const card = cards[currentCard];
+    function updateCardView() {
       const mainCard = document.getElementById('mainCard');
       mainCard.classList.remove('flipped');
-      
+
+      if (currentFiltered.length === 0) {
+        document.getElementById('cardCategory').innerText = "BULUNAMADI";
+        document.getElementById('cardIndex').innerText = "0 / 0";
+        document.getElementById('cardTitleFront').innerText = "Arama kriterine uygun bilgi kartı bulunamadı.";
+        document.getElementById('cardAnswerTitle').innerText = "-";
+        document.getElementById('cardAnswer').innerText = "Lütfen arama terimini değiştirin veya 'Tümü' filtresine tıklayın.";
+        document.getElementById('cardNote').innerText = "";
+        return;
+      }
+
+      const item = currentFiltered[currentIndex];
       setTimeout(() => {
-        document.getElementById('cardCategory').innerText = card.category;
-        document.getElementById('cardIndex').innerText = `${currentCard + 1} / ${cards.length}`;
-        document.getElementById('cardQuestion').innerText = card.question;
-        document.getElementById('cardAnswer').innerText = card.answer;
-        document.getElementById('cardNote').innerText = card.note;
-      }, 200);
+        document.getElementById('cardCategory').innerText = item.unitName;
+        document.getElementById('cardCategoryBack').innerText = item.unitName;
+        document.getElementById('cardIndex').innerText = `${currentIndex + 1} / ${currentFiltered.length}`;
+        document.getElementById('cardTitleFront').innerText = item.title;
+        document.getElementById('cardAnswerTitle').innerText = item.title;
+        document.getElementById('cardAnswer').innerText = item.desc;
+        document.getElementById('cardNote').innerHTML = `<strong>ÖSYM / Sınav Notu:</strong> ${item.tip}`;
+      }, 120);
     }
 
     function nextCard() {
-      currentCard = (currentCard + 1) % cards.length;
-      updateCard();
+      if (currentFiltered.length === 0) return;
+      currentIndex = (currentIndex + 1) % currentFiltered.length;
+      updateCardView();
     }
 
     function prevCard() {
-      currentCard = (currentCard - 1 + cards.length) % cards.length;
-      updateCard();
+      if (currentFiltered.length === 0) return;
+      currentIndex = (currentIndex - 1 + currentFiltered.length) % currentFiltered.length;
+      updateCardView();
     }
 
-    function switchTab(tab) {
-      const cardsSec = document.getElementById('cardsSection');
-      const quizSec = document.getElementById('quizSection');
+    function filterUnit(unit, btnElement) {
+      selectedUnit = unit;
+      const buttons = document.querySelectorAll('.filter-chip');
+      buttons.forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      applyFilters();
+    }
+
+    function handleSearch() {
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      currentFiltered = items.filter(item => {
+        const matchesUnit = (selectedUnit === 'all') || (item.unit === selectedUnit);
+        const matchesSearch = !q || 
+          item.title.toLowerCase().includes(q) || 
+          item.desc.toLowerCase().includes(q) || 
+          item.tip.toLowerCase().includes(q);
+        return matchesUnit && matchesSearch;
+      });
+
+      currentIndex = 0;
+      updateCardView();
+      renderListView();
+    }
+
+    function switchView(view) {
+      const deck = document.getElementById('deckSection');
+      const list = document.getElementById('listSection');
       const tabs = document.querySelectorAll('.tab-btn');
 
-      if (tab === 'cards') {
-        cardsSec.classList.remove('hidden');
-        quizSec.classList.add('hidden');
+      if (view === 'deck') {
+        deck.classList.remove('hidden');
+        list.classList.add('hidden');
         tabs[0].classList.add('active');
         tabs[1].classList.remove('active');
       } else {
-        cardsSec.classList.add('hidden');
-        quizSec.classList.remove('hidden');
+        deck.classList.add('hidden');
+        list.classList.remove('hidden');
         tabs[0].classList.remove('active');
         tabs[1].classList.add('active');
-        loadQuiz();
+        renderListView();
       }
     }
 
-    function loadQuiz() {
-      const q = quizQuestions[currentQuiz];
-      document.getElementById('quizIndex').innerText = `${currentQuiz + 1} / ${quizQuestions.length}`;
-      document.getElementById('quizQuestion').innerText = q.question;
-      document.getElementById('quizFeedback').innerText = '';
-
-      const container = document.getElementById('quizOptions');
+    function renderListView() {
+      const container = document.getElementById('listContainer');
       container.innerHTML = '';
 
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.innerText = opt;
-        btn.onclick = () => selectAnswer(idx);
-        container.appendChild(btn);
+      if (currentFiltered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding: 20px; color: #94a3b8;">Aramaya uygun sonuç bulunamadı.</div>`;
+        return;
+      }
+
+      currentFiltered.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'list-card';
+        card.innerHTML = `
+          <div class="list-header">
+            <span class="category-chip">${item.unitName}</span>
+            <span class="list-num">#${idx + 1}</span>
+          </div>
+          <div class="list-title">${item.title}</div>
+          <div class="list-desc">${item.desc}</div>
+          <div class="list-tip">📌 <strong>ÖSYM İpucu:</strong> ${item.tip}</div>
+        `;
+        container.appendChild(card);
       });
     }
 
-    function selectAnswer(index) {
-      const q = quizQuestions[currentQuiz];
-      const buttons = document.querySelectorAll('.opt-btn');
-      
-      buttons.forEach(btn => btn.disabled = true);
-
-      if (index === q.answer) {
-        buttons[index].classList.add('correct');
-        document.getElementById('quizFeedback').innerText = "Doğru! " + q.explanation;
-        confetti({ particleCount: 30, spread: 60, origin: { y: 0.8 } });
-      } else {
-        buttons[index].classList.add('wrong');
-        buttons[q.answer].classList.add('correct');
-        document.getElementById('quizFeedback').innerText = "Yanlış. " + q.explanation;
-      }
-
-      setTimeout(() => {
-        if (currentQuiz + 1 < quizQuestions.length) {
-          currentQuiz++;
-          loadQuiz();
-        } else {
-          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-          document.getElementById('quizQuestion').innerHTML = "🎯 Test Tamamlandı!<br><br>Çağdaş Türk ve Dünya Tarihi soru modülü tamamlandı.";
-          document.getElementById('quizOptions').innerHTML = '';
-          document.getElementById('quizFeedback').innerText = "Soruları tamamladın, kartlar sekmesinden tekrar yapabilirsin.";
-        }
-      }, 2000);
-    }
-
-    updateCard();
+    // İlk açılış
+    updateCardView();
   </script>
 </body>
 </html>
