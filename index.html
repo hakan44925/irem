@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>İrem | KPSS Çağdaş Türk ve Dünya Tarihi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #151d30;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --success: #059669;
+      --danger: #dc2626;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #263352;
+      --tag-bg: rgba(37, 99, 235, 0.16);
+      --tag-text: #60a5fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: auto 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 6px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .tab-bar {
+      display: flex;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .flashcard-wrapper {
+      perspective: 1000px;
+      width: 100%;
+      height: 300px;
+      cursor: pointer;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+    }
+
+    .card-front {
+      background: linear-gradient(180deg, #172138, #0f172a);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(180deg, #1b2642, #111a2e);
+      border-color: #3b82f6;
+    }
+
+    .tag-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-question {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.45;
+      text-align: center;
+      margin: auto 0;
+    }
+
+    .card-answer {
+      font-size: 0.94rem;
+      line-height: 1.45;
+      text-align: center;
+      color: #e2e8f0;
+      margin: auto 0;
+    }
+
+    .tip-box {
+      font-size: 0.78rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .quiz-question {
+      font-size: 0.96rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .opt-btn {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .opt-btn.correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--success);
+      color: #34d399;
+    }
+
+    .opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+      color: #f87171;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">KPSS HAZIRLIK MODÜLÜ</div>
+      <h1>İrem'in Çağdaş Tarih Not Defteri</h1>
+      <p>Çağdaş Türk ve Dünya Tarihi Nokta Atışı Bilgiler</p>
+    </header>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('cards')">🃏 Bilgi Kartları</button>
+      <button class="tab-btn" onclick="switchTab('quiz')">🎯 Soru Çözümü</button>
+    </div>
+
+    <div id="cardsSection" style="display: flex; flex-direction: column; gap: 12px;">
+      <div class="flashcard-wrapper" onclick="flipCard()">
+        <div class="flashcard" id="mainCard">
+          <div class="card-face card-front">
+            <div class="tag-row">
+              <span id="cardCategory">KATEGORİ</span>
+              <span id="cardIndex">1 / 6</span>
+            </div>
+            <div class="card-question" id="cardQuestion">Yükleniyor...</div>
+            <div class="hint">Cevabı ve ÖSYM notunu görmek için dokun 👆</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="tag-row">
+              <span>HAP BİLGİ</span>
+              <span style="color: #60a5fa;">ÖSYM İPUCU 📌</span>
+            </div>
+            <div class="card-answer" id="cardAnswer">Cevap yükleniyor...</div>
+            <div class="tip-box" id="cardNote">İpucu...</div>
+            <div class="hint">Sonraki karta geçmek için alttan ilerle 👉</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-secondary" onclick="prevCard()">◀ Önceki</button>
+        <button class="btn btn-primary" onclick="nextCard()">Sonraki ▶</button>
+      </div>
+    </div>
+
+    <div id="quizSection" class="hidden">
+      <div class="quiz-card">
+        <div class="tag-row">
+          <span>SORU MODÜLÜ</span>
+          <span id="quizIndex">1 / 4</span>
+        </div>
+        <div class="quiz-question" id="quizQuestion">Soru metni...</div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div id="quizFeedback" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; min-height: 24px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = [
+      {
+        category: "SOĞUK SAVAŞ / BLOKLAR",
+        question: "1955 Bandung Konferansı ile temelleri atılan ve 'Doğu ile Batı blokları dışında kalmayı' amaçlayan hareket hangisidir?",
+        answer: "Bağlantısızlar Hareketi (Üçüncü Dünya Ülkeleri). Öncüleri: Tito (Yugoslavya), Cemal Abdülnasır (Mısır), Nehru (Hindistan).",
+        note: "ÖSYM Soru Tipi: Öncü ülkeleri ve liderleri sıklıkla seçeneklerde çeldirici olarak sorar."
+      },
+      {
+        category: "DOKTRİNLER & YARDIMLAR",
+        question: "ABD'nin Sovyet yayılmacılığına karşı Türkiye ve Yunanistan'a doğrudan askeri yardım sağladığı belge hangisidir?",
+        answer: "Truman Doktrini (1947).",
+        note: "Karıştırma: Truman Doktrini askeri yardım içeriklidir; Marshall Planı ise ekonomik kalkınma yardımıdır."
+      },
+      {
+        category: "NÜKLEER KRİZLER",
+        question: "1962 yılında ABD ve SSCB'yi nükleer savaş eşiğine getiren, Türkiye'deki Jüpiter füzelerinin de pazarlık konusu olduğu gelişme nedir?",
+        answer: "Küba Füze Krizi (Ekim Füzeleri Bunalımı).",
+        note: "Sonuç: Bu krizin ardından Washington ile Moskova arasına 'Kırmızı Telefon' doğrudan iletişim hattı çekilmiştir."
+      },
+      {
+        category: "DİPLOMASİ TARİHİ",
+        question: "1973 Yom Kippur (Arap-İsrail) Savaşı sonrası Henry Kissinger'ın yürüttüğü barış diplomasisine ne ad verilir?",
+        answer: "Mekik Diplomasisi.",
+        note: "Sonuç: Bu diplomatik süreç 1978 Camp David Antlaşması'nın imzalanmasına zemin hazırlamıştır."
+      },
+      {
+        category: "KODLAMA (HAP BİLGİ)",
+        question: "Balkan Antantı'na katılan kurucu devletlerin kodlaması ve üyeleri kimlerdir?",
+        answer: "Kodlama: TAYYAR ➡️ Türkiye, (A)tina/Yunanistan, Yugoslavya, Romanya.",
+        note: "Önemli: Bulgaristan (revizyonist olduğu için) ve Arnavutluk (İtalya baskısı nedeniyle) katılmamıştır."
+      },
+      {
+        category: "SSCB'NİN DAĞILMASI",
+        question: "Mihail Gorbaçov'un SSCB'yi kurtarmak için uyguladığı 'Açıklık/Şeffaflık' ve 'Yeniden Yapılanma' politikaları nelerdir?",
+        answer: "Glasnost (Şeffaflık/Açıklık) ve Perestroyka (Ekonomik ve Siyasi Yeniden Yapılanma).",
+        note: "Sınav Çeldiricisi: Bu iki kavramı birbirinin tanımıyla eşleştirerek ters sormayı severler."
+      }
+    ];
+
+    const quizQuestions = [
+      {
+        question: "Aşağıdaki devletlerden hangisi 1955 Bandung Konferansı ile şekillenen Bağlantısızlar Hareketi'nin öncü liderlerinden biri DEĞİLDİR?",
+        options: ["Yugoslavya (Tito)", "Mısır (Cemal Abdülnasır)", "İngiltere (Winston Churchill)", "Hindistan (Nehru)"],
+        answer: 2,
+        explanation: "Bağlantısızlar Hareketi Tito, Nasır ve Nehru öncülüğünde kurulmuştur; Churchill Batı Bloku lideridir."
+      },
+      {
+        question: "1974 Kıbrıs Barış Harekâtı sırasında görev yapan Türkiye Cumhuriyeti Başbakanı kimdir?",
+        options: ["Süleyman Demirel", "Bülent Ecevit", "Adnan Menderes", "Nihat Erim"],
+        answer: 1,
+        explanation: "Harekât, CHP-MSP koalisyonunda Başbakan Bülent Ecevit ve Başbakan Yardımcısı Necmettin Erbakan döneminde yapılmıştır."
+      },
+      {
+        question: "Mihail Gorbaçov döneminde Sovyetler Birliği'nde devlet yönetiminde şeffaflığı sağlamak amacıyla yürürlüğe konan politikanın adı nedir?",
+        options: ["Perestroyka", "Glasnost", "Kominform", "Comecon"],
+        answer: 1,
+        explanation: "Glasnost 'açıklık ve şeffaflık', Perestroyka ise 'yeniden yapılanma ve reform' anlamına gelir."
+      },
+      {
+        question: "ABD'nin Orta Doğu ülkelerini Sovyet yayılmacılığına karşı korumayı ve askeri yardım yapmayı taahhüt ettiği doktrin hangisidir?",
+        options: ["Eisenhower Doktrini", "Monroe Doktrini", "Truman Doktrini", "Breznev Doktrini"],
+        answer: 0,
+        explanation: "Orta Doğu'ya yönelik askeri-ekonomik taahhüt Eisenhower Doktrini'dir. Monroe ise ABD'nin yalnızlık politikasıdır."
+      }
+    ];
+
+    let currentCard = 0;
+    let currentQuiz = 0;
+
+    function flipCard() {
+      document.getElementById('mainCard').classList.toggle('flipped');
+    }
+
+    function updateCard() {
+      const card = cards[currentCard];
+      const mainCard = document.getElementById('mainCard');
+      mainCard.classList.remove('flipped');
+      
+      setTimeout(() => {
+        document.getElementById('cardCategory').innerText = card.category;
+        document.getElementById('cardIndex').innerText = `${currentCard + 1} / ${cards.length}`;
+        document.getElementById('cardQuestion').innerText = card.question;
+        document.getElementById('cardAnswer').innerText = card.answer;
+        document.getElementById('cardNote').innerText = card.note;
+      }, 200);
+    }
+
+    function nextCard() {
+      currentCard = (currentCard + 1) % cards.length;
+      updateCard();
+    }
+
+    function prevCard() {
+      currentCard = (currentCard - 1 + cards.length) % cards.length;
+      updateCard();
+    }
+
+    function switchTab(tab) {
+      const cardsSec = document.getElementById('cardsSection');
+      const quizSec = document.getElementById('quizSection');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      if (tab === 'cards') {
+        cardsSec.classList.remove('hidden');
+        quizSec.classList.add('hidden');
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+      } else {
+        cardsSec.classList.add('hidden');
+        quizSec.classList.remove('hidden');
+        tabs[0].classList.remove('active');
+        tabs[1].classList.add('active');
+        loadQuiz();
+      }
+    }
+
+    function loadQuiz() {
+      const q = quizQuestions[currentQuiz];
+      document.getElementById('quizIndex').innerText = `${currentQuiz + 1} / ${quizQuestions.length}`;
+      document.getElementById('quizQuestion').innerText = q.question;
+      document.getElementById('quizFeedback').innerText = '';
+
+      const container = document.getElementById('quizOptions');
+      container.innerHTML = '';
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerText = opt;
+        btn.onclick = () => selectAnswer(idx);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index) {
+      const q = quizQuestions[currentQuiz];
+      const buttons = document.querySelectorAll('.opt-btn');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (index === q.answer) {
+        buttons[index].classList.add('correct');
+        document.getElementById('quizFeedback').innerText = "Doğru! " + q.explanation;
+        confetti({ particleCount: 30, spread: 60, origin: { y: 0.8 } });
+      } else {
+        buttons[index].classList.add('wrong');
+        buttons[q.answer].classList.add('correct');
+        document.getElementById('quizFeedback').innerText = "Yanlış. " + q.explanation;
+      }
+
+      setTimeout(() => {
+        if (currentQuiz + 1 < quizQuestions.length) {
+          currentQuiz++;
+          loadQuiz();
+        } else {
+          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+          document.getElementById('quizQuestion').innerHTML = "🎯 Test Tamamlandı!<br><br>Çağdaş Türk ve Dünya Tarihi soru modülü tamamlandı.";
+          document.getElementById('quizOptions').innerHTML = '';
+          document.getElementById('quizFeedback').innerText = "Soruları tamamladın, kartlar sekmesinden tekrar yapabilirsin.";
+        }
+      }, 2000);
+    }
+
+    updateCard();
+  </script>
+</body>
+</html>
